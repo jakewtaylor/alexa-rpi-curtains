@@ -3,11 +3,11 @@
         "ip_address": "auto"
     },
     "PLUGINS": {
-        "RelayPlugin": {
-            "path": "./RelayPlugin.py",
+        "MotorPlugin": {
+            "path": "./MotorPlugin.py",
             "DEVICES": [
                 {
-                    "name": "Lamp",
+                    "name": "Curtains",
                     "port": 12340,
                     "channel": 4
                 }
