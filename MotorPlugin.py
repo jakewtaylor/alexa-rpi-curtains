@@ -39,7 +39,8 @@ class MotorPlugin(FauxmoPlugin):
             self.motor_on()
 
             return True
-        except:
+        except Exception as e:
+            print(str(e))
             self.state = 'unknown'
             return False
 

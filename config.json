@@ -4,12 +4,11 @@
     },
     "PLUGINS": {
         "MotorPlugin": {
-            "path": "./MotorPlugin.py",
+            "path": "/home/pi/alexa-rpi-curtains/MotorPlugin.py",
             "DEVICES": [
                 {
                     "name": "Curtains",
-                    "port": 12340,
-                    "channel": 4
+                    "port": 12340
                 }
             ]
         }
