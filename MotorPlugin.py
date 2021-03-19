@@ -2,14 +2,9 @@ from fauxmo.plugins import FauxmoPlugin
 import time
 import RPi.GPIO as GPIO
 import os
+from gpio import Pins
 
 class MotorPlugin(FauxmoPlugin):
-    # GPIO Pin Reference
-    PWMA = 7
-    AIN2 = 11
-    AIN1 = 12
-    STBY = 13
-
     # Time in seconds to leave the motor running when toggled
     TIME_TO_MOVE = 5
 
@@ -21,13 +16,10 @@ class MotorPlugin(FauxmoPlugin):
         self.state = 'off'
 
         # initiate the GPIO pins
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.PWMA, GPIO.OUT)
-        GPIO.setup(self.AIN2, GPIO.OUT)
-        GPIO.setup(self.AIN1, GPIO.OUT)
-        GPIO.setup(self.STBY, GPIO.OUT)
+        Pins.init()
 
-        GPIO.output(self.PWMA, GPIO.HIGH) # Set motor speed
+        # Set motor speed
+        GPIO.output(self.PWMA, GPIO.HIGH)
 
         # initiate parent class
         super().__init__(name=name, port=port)
@@ -75,8 +67,7 @@ class MotorPlugin(FauxmoPlugin):
                 os.P_NOWAIT,
                 '/home/pi/alexa-rpi-curtains/motor-shutdown.py',
                 'motor-shutdown.py',
-                self.TIME_TO_MOVE,
-                self.STBY
+                self.TIME_TO_MOVE
             )
             print('spawned ', pid)
             # print('waiting....')
@@ -101,27 +92,27 @@ class MotorPlugin(FauxmoPlugin):
     Tells the motor to spin in a clockwise manner.
     """
     def configure_clockwise(self) -> None:
-        GPIO.output(self.AIN1, GPIO.HIGH)
-        GPIO.output(self.AIN2, GPIO.LOW)
+        GPIO.output(Pins.AIN1, GPIO.HIGH)
+        GPIO.output(Pins.AIN2, GPIO.LOW)
 
     """
     Tells the motor to spin in a counter-clockwise manner.
     """
     def configure_counter_clockwise(self) -> None:
-        GPIO.output(self.AIN1, GPIO.LOW)
-        GPIO.output(self.AIN2, GPIO.HIGH)
+        GPIO.output(Pins.AIN1, GPIO.LOW)
+        GPIO.output(Pins.AIN2, GPIO.HIGH)
 
     """
     Powers up the motor.
     """
     def motor_on(self) -> None:
-        GPIO.output(self.STBY, GPIO.HIGH)
+        GPIO.output(Pins.STBY, GPIO.HIGH)
 
     """
     Powers down the motor.
     """
     def motor_off(self) -> None:
-        GPIO.output(self.STBY, GPIO.LOW)
+        GPIO.output(Pins.STBY, GPIO.LOW)
 
     def wait_for_movement(self) -> None:
         time.sleep(self.TIME_TO_MOVE)
