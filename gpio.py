@@ -8,10 +8,10 @@ class Pins:
     STBY = 13
 
     @staticmethod
-    def init(self):
+    def init():
         # initiate the GPIO pins
         GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.PWMA, GPIO.OUT)
-        GPIO.setup(self.AIN2, GPIO.OUT)
-        GPIO.setup(self.AIN1, GPIO.OUT)
-        GPIO.setup(self.STBY, GPIO.OUT)
+        GPIO.setup(Pins.PWMA, GPIO.OUT)
+        GPIO.setup(Pins.AIN2, GPIO.OUT)
+        GPIO.setup(Pins.AIN1, GPIO.OUT)
+        GPIO.setup(Pins.STBY, GPIO.OUT)
