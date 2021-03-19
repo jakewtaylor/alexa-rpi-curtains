@@ -1,4 +1,4 @@
-#!/usr/bin/env
+#!/home/pi/.venv/bin/python
 
 import RPi.GPIO as GPIO
 import time
