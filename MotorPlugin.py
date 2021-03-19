@@ -84,6 +84,7 @@ class MotorPlugin(FauxmoPlugin):
     Gets the current state.
     """
     def get_state(self) -> str:
+        print('state was asked for, giving:' self.state)
         return self.state
 
     """
