@@ -19,7 +19,7 @@ class MotorPlugin(FauxmoPlugin):
         Pins.init()
 
         # Set motor speed
-        GPIO.output(self.PWMA, GPIO.HIGH)
+        GPIO.output(Pins.PWMA, GPIO.HIGH)
 
         # initiate parent class
         super().__init__(name=name, port=port)
