@@ -35,7 +35,7 @@ class MotorPlugin(FauxmoPlugin):
 
         try:
             self.configure_clockwise()
-            GPIO.output(self.PWMA, gpio.HIGH) # Set motor speed
+            GPIO.output(self.PWMA, GPIO.HIGH) # Set motor speed
             self.motor_on()
 
             return True
