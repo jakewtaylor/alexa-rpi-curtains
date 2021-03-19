@@ -1,6 +1,7 @@
 from fauxmo.plugins import FauxmoPlugin
 import time
 import RPi.GPIO as GPIO
+import os
 
 class MotorPlugin(FauxmoPlugin):
     # GPIO Pin Reference
@@ -9,8 +10,8 @@ class MotorPlugin(FauxmoPlugin):
     AIN1 = 12
     STBY = 13
 
+    # Time in seconds to leave the motor running when toggled
     TIME_TO_MOVE = 5
-    OPEN = True
 
     """
     Initiates the plugin.
@@ -69,11 +70,20 @@ class MotorPlugin(FauxmoPlugin):
             self.configure_clockwise()
             self.motor_on()
 
-            print('waiting....')
-            self.wait_for_movement()
+            print('spawning shutdown process...')
+            pid = os.spawnlp(
+                os.P_NOWAIT,
+                '/home/pi/alexa-rpi-curtains/motor-shutdown.py',
+                'motor-shutdown.py',
+                self.TIME_TO_MOVE,
+                self.STBY
+            )
+            print('spawned ', pid)
+            # print('waiting....')
+            # self.wait_for_movement()
 
-            print('motor off')
-            self.motor_off()
+            # print('motor off')
+            # self.motor_off()
 
             return True
         except:
