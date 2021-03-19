@@ -1,7 +1,7 @@
 #!/home/pi/.venv/bin/python
 
 import RPi.GPIO as GPIO
-import time
+import time,select
 import sys
 from gpio import Pins
 
