@@ -1,4 +1,5 @@
 from fauxmo.plugins import FauxmoPlugin
+import time
 import RPi.GPIO as GPIO
 
 class MotorPlugin(FauxmoPlugin):
@@ -7,6 +8,9 @@ class MotorPlugin(FauxmoPlugin):
     AIN2 = 11
     AIN1 = 12
     STBY = 13
+
+    TIME_TO_MOVE = 5
+    OPEN = True
 
     """
     Initiates the plugin.
@@ -22,6 +26,8 @@ class MotorPlugin(FauxmoPlugin):
         GPIO.setup(self.AIN1, GPIO.OUT)
         GPIO.setup(self.STBY, GPIO.OUT)
 
+        GPIO.output(self.PWMA, GPIO.HIGH) # Set motor speed
+
         # initiate parent class
         super().__init__(name=name, port=port)
 
@@ -34,9 +40,15 @@ class MotorPlugin(FauxmoPlugin):
         self.state = 'on'
 
         try:
-            self.configure_clockwise()
-            GPIO.output(self.PWMA, GPIO.HIGH) # Set motor speed
+            print('moving motor counter clockwise')
+            self.configure_counter_clockwise()
             self.motor_on()
+
+            print('waiting....')
+            self.wait_for_movement()
+
+            print('motor off')
+            self.motor_off()
 
             return True
         except Exception as e:
@@ -53,7 +65,14 @@ class MotorPlugin(FauxmoPlugin):
         self.state = 'off'
 
         try:
-            # turn off the channel
+            print('moving motor clockwise')
+            self.configure_clockwise()
+            self.motor_on()
+
+            print('waiting....')
+            self.wait_for_movement()
+
+            print('motor off')
             self.motor_off()
 
             return True
@@ -92,3 +111,6 @@ class MotorPlugin(FauxmoPlugin):
     """
     def motor_off(self) -> None:
         GPIO.output(self.STBY, GPIO.LOW)
+
+    def wait_for_movement(self) -> None:
+        time.sleep(self.TIME_TO_MOVE)
