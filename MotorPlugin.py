@@ -38,11 +38,10 @@ class MotorPlugin(FauxmoPlugin):
             self.configure_counter_clockwise()
             self.motor_on()
 
-            print('waiting....')
-            self.wait_for_movement()
-
-            print('motor off')
-            self.motor_off()
+            threading.Timer(
+                self.TIME_TO_MOVE,
+                self.motor_off
+            ).start()
 
             return True
         except Exception as e:
@@ -67,15 +66,6 @@ class MotorPlugin(FauxmoPlugin):
                 self.TIME_TO_MOVE,
                 self.motor_off
             ).start()
-
-            # print('spawning shutdown process...')
-            # pid = os.spawnlp(
-            #     os.P_NOWAIT,
-            #     '/home/pi/alexa-rpi-curtains/motor-shutdown.py',
-            #     'motor-shutdown.py',
-            #     self.TIME_TO_MOVE
-            # )
-            # print('spawned ', pid)
 
             return True
         except:
