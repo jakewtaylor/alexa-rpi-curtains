@@ -3,6 +3,7 @@ import time
 import RPi.GPIO as GPIO
 import os
 from gpio import Pins
+import threading
 
 class MotorPlugin(FauxmoPlugin):
     # Time in seconds to leave the motor running when toggled
@@ -62,19 +63,19 @@ class MotorPlugin(FauxmoPlugin):
             self.configure_clockwise()
             self.motor_on()
 
-            print('spawning shutdown process...')
-            pid = os.spawnlp(
-                os.P_NOWAIT,
-                '/home/pi/alexa-rpi-curtains/motor-shutdown.py',
-                'motor-shutdown.py',
-                self.TIME_TO_MOVE
-            )
-            print('spawned ', pid)
-            # print('waiting....')
-            # self.wait_for_movement()
+            threading.Timer(
+                self.TIME_TO_MOVE,
+                self.motor_off
+            ).start()
 
-            # print('motor off')
-            # self.motor_off()
+            # print('spawning shutdown process...')
+            # pid = os.spawnlp(
+            #     os.P_NOWAIT,
+            #     '/home/pi/alexa-rpi-curtains/motor-shutdown.py',
+            #     'motor-shutdown.py',
+            #     self.TIME_TO_MOVE
+            # )
+            # print('spawned ', pid)
 
             return True
         except:
@@ -114,5 +115,8 @@ class MotorPlugin(FauxmoPlugin):
     def motor_off(self) -> None:
         GPIO.output(Pins.STBY, GPIO.LOW)
 
+    """
+    Sleeps for the configured timeout
+    """
     def wait_for_movement(self) -> None:
         time.sleep(self.TIME_TO_MOVE)
